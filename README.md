@@ -2,7 +2,7 @@
 
 ## Version control
 
-> ### v0.1
+> [### v0.1][]
 > * L2 layer working
 >   * Get_Info_Req
 >   * Resend_Req
