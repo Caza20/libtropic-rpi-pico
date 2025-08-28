@@ -1,5 +1,17 @@
 # libtropic-rpi-pico v0.1
 
+## Version control
+
+> ### v0.1
+> * L2 layer working
+>   * Get_Info_Req
+>   * Resend_Req
+>   * Sleep_Req
+>   * Startup_Req
+>   * Get_Log_Req
+>
+> * Libtropic examples working (L2 layer only) 
+
 ## About
 
 This repository contains examples of libtropic's usage on Raspberry Pi Pico development boards.
