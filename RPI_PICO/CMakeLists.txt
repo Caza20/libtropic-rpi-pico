@@ -60,12 +60,12 @@ pico_sdk_init()
 
 # Specify other source files
 set(SOURCES
-    Src/main.c
+    src/main.c
     ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico/lt_port_rpi_pico.c
 )
 
 set(HEADERS
-    Inc/main.h
+    inc/main.h
 )
 
 ###########################################################################
@@ -105,7 +105,7 @@ if (LT_BUILD_EXAMPLES)
         )
 
         target_include_directories(${exe_name} PRIVATE
-            Inc/
+            inc/
             ${PATH_TO_LIBTROPIC}/include
             ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico
         )

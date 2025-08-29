@@ -13,7 +13,7 @@
 #include "hardware/spi.h"
 #include "hardware/uart.h"
 #include "hardware/gpio.h"
-#include "../Inc/main.h"
+#include "../inc/main.h"
 #include "libtropic_examples.h"
 #include "libtropic_functional_tests.h"
 #include "libtropic_logging.h"

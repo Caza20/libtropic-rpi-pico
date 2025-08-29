@@ -47,6 +47,15 @@ To build examples, switch to one of the platform directories (in this case, the 
 cd RPI-PICO/
 mkdir build
 cd build
+cmake -DLT_BUILD_EXAMPLES=1 .. 
+make
+```
+
+On Windows, we recommend using:
+```bash
+cd RPI-PICO/
+mkdir build
+cd build
 cmake -DLT_BUILD_EXAMPLES=1 .. -G "Ninja"
 ninja
 ```
