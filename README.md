@@ -119,7 +119,7 @@ On Windows, we recommend using:
 cd rpi_pico
 mkdir build
 cd build
-cmake -DLT_BUILD_EXAMPLES=1 .. -G "Ninja"
+cmake -DLT_BUILD_TESTS=1 .. -G "Ninja"
 ninja
 ```
 
