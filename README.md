@@ -44,7 +44,7 @@ All available examples can be found [here](https://github.com/Caza20/libtropic/t
 
 To build examples, switch to one of the platform directories (in this case, the `RPI-PICO`), and do the following:
 ```bash
-cd RPI-PICO/
+cd rpi_pico/
 mkdir build
 cd build
 cmake -DLT_BUILD_EXAMPLES=1 .. 
@@ -53,7 +53,7 @@ make
 
 On Windows, we recommend using:
 ```bash
-cd RPI-PICO/
+cd rpi_pico
 mkdir build
 cd build
 cmake -DLT_BUILD_EXAMPLES=1 .. -G "Ninja"
@@ -98,7 +98,61 @@ INFO    [  69] Deinitializing handle
 
 ## Building Functional Tests
 
-> Work in progress
+All available functional tests can be found [here](https://github.com/Caza20/libtropic/tree/master/tests/functional/).
+
+> [!WARNING]
+> Some tests make irreversible changes to the chip, such as writing pairing keys. Those irreversible
+> tests contain `_ire_` in their name. On the other hand, reversible tests are marked `_rev_`
+> and are generally safe to run, as they do only temporary changes and always do a clean up.
+
+To build functional tests, switch to one of the platform directories (in this case, the `rpi_pico`), and do the following:
+```bash
+cd rpi_pico
+mkdir build
+cd build
+cmake -DLT_BUILD_TESTS=1 .. 
+make
+```
+
+On Windows, we recommend using:
+```bash
+cd rpi_pico
+mkdir build
+cd build
+cmake -DLT_BUILD_EXAMPLES=1 .. -G "Ninja"
+ninja
+```
+
+> [!IMPORTANT]
+> On Windows, it is recommended to keep the project outside OneDrive, as it may block the creation of some files.
+
+For each test, an ELF binary will be created in the build directory.
+
+> [!IMPORTANT]
+> When `LT_BUILD_TESTS` are set, there has to be a way to define the SH0 private key for the TROPIC01's pairing key slot 0, because both the examples and the tests depend on it. For this purpose, the CMake variable `LT_SH0_PRIV_PATH` is used, which should hold the path to the file with the SH0 private key in PEM or DER format. By default, the path is set to the currently used lab batch package, found in `libtropic/provisioning_data/<lab_batch_package_directory>/sh0_key_pair/`. But it can be overriden by the user either from the command line when executing CMake (switch `-DLT_SH0_PRIV_PATH=<path>`), or from a child CMakeLists.txt.
+
+
+Normally, we use CTest for handling the functional tests. They are executed using `lt_test_runner` on internal TS11 evaluation boards.
+
+To launch all tests:
+```bash
+ctest
+```
+> [!TIP]
+> To see all output use `--verbose`.
+
+To launch a selected test:
+```bash
+ctest -R test_name
+```
+
+To enumerate tests:
+```bash
+ctest -N
+```
+
+If you want to launch the tests without the platform, simply flash select binary manually and inspect
+the UART output. Note that a different UART is used for test output. This method is not officially supported.
 
 ## Debugging in VS Code
 

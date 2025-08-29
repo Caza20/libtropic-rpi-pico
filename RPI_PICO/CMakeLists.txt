@@ -155,83 +155,87 @@ endif()
 #                                                                         #
 ###########################################################################
 
-# if (LT_BUILD_TESTS)
-#      # Enable CTest.
-#     enable_testing()
+if (LT_BUILD_TESTS)
+     # Enable CTest.
+    enable_testing()
 
-#     # So we can include preprocessed test registry (lt_test_registry.c.inc).
-#     include_directories(${CMAKE_CURRENT_BINARY_DIR}/libtropic)
+    # So we can include preprocessed test registry (lt_test_registry.c.inc).
+    include_directories(${CMAKE_CURRENT_BINARY_DIR}/libtropic)
 
-#     # Loop through tests defined in libtropic and prepare environment.
-#     foreach(test_name IN LISTS LIBTROPIC_TEST_LIST)
+    # Loop through tests defined in libtropic and prepare environment.
+    foreach(test_name IN LISTS LIBTROPIC_TEST_LIST)
 
-#         # Create a correct macro from test name.
-#         string(TOUPPER ${test_name} test_macro)
-#         string(REPLACE " " "_" test_macro ${test_macro})
+        # Create a correct macro from test name.
+        string(TOUPPER ${test_name} test_macro)
+        string(REPLACE " " "_" test_macro ${test_macro})
 
-#         set(exe_name ${test_name})
+        set(exe_name ${test_name})
 
-#         # Define executable (separate for each test) and link dependencies.
-#         add_executable(${exe_name}
-#             ${SOURCES}
-#             ${HEADERS}
-#             ${PATH_TO_LIBTROPIC}/tests/functional/${test_name}.c
-#             ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico/lt_port_rpi_pico.c
-#         )
+        # Define executable (separate for each test) and link dependencies.
+        add_executable(${exe_name}
+            ${SOURCES}
+            ${HEADERS}
+            ${PATH_TO_LIBTROPIC}/tests/functional/${test_name}.c
+            ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico/lt_port_rpi_pico.c
+        )
 
-#         target_include_directories(${exe_name} PRIVATE
-#             Inc/
-#             ${PATH_TO_LIBTROPIC}/include
-#             ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico
-#         )
+        # Define silicon revision macro (ABAB or ACAB)
+        target_compile_definitions(${exe_name} PRIVATE ABAB)
 
-#         # Pico-sdk libraries
-#         target_link_libraries(${exe_name}
-#             pico_stdlib
-#             pico_rand
-#             hardware_adc
-#             hardware_spi
-#             hardware_uart
-#             hardware_gpio
-#             tropic
-#         )
+        target_include_directories(${exe_name} PRIVATE
+            Inc/
+            ${PATH_TO_LIBTROPIC}/include
+            ${PATH_TO_LIBTROPIC}/hal/port/rpi_pico
+            ${PATH_TO_LIBTROPIC}/src
+        )
 
-#         # Warnings configs
-#         target_compile_options(${exe_name} PRIVATE
-#             -Wall
-#             -Wextra
-#             -Werror
-#             -Wno-error=unused-variable
-#             -Wno-error=unused-parameter
-#             -Wno-error=missing-prototypes
-#         )
+        # Pico-sdk libraries
+        target_link_libraries(${exe_name}
+            pico_stdlib
+            pico_rand
+            hardware_adc
+            hardware_spi
+            hardware_uart
+            hardware_gpio
+            tropic
+        )
+
+        # Warnings configs
+        target_compile_options(${exe_name} PRIVATE
+            -Wall
+            -Wextra
+            -Werror
+            -Wno-error=unused-variable
+            -Wno-error=unused-parameter
+            -Wno-error=missing-prototypes
+        )
 
 
-#         # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
-#         target_compile_definitions(${exe_name} PRIVATE  LT_BUILD_TESTS)
-#         target_compile_definitions(${exe_name} PRIVATE  ${test_macro})
+        # Enable test registry using LT_BUILD_TESTS and choose correct test for the binary.
+        target_compile_definitions(${exe_name} PRIVATE  LT_BUILD_TESTS)
+        target_compile_definitions(${exe_name} PRIVATE  ${test_macro})
 
-#         # Used for testing. Do not use it on when running on standalone Nucleo board
-#         if (LT_TESTING_RIG)
-#             target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
-#         endif()
+        # Used for testing. Do not use it on when running on standalone Nucleo board
+        if (LT_TESTING_RIG)
+            target_compile_definitions(${exe_name} PRIVATE LT_TESTING_RIG)
+        endif()
 
-#         # Add CTest entry.
-#         add_test(NAME ${test_name}
-#                 COMMAND python3 -m lt_test_runner PICO_BOARD ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
-#         )
-#         # Correctly define Python module path, so we can call lt_test_runner.
-#         get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
-#         set_tests_properties(${test_name} PROPERTIES
-#             ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
-#         )
+        # Add CTest entry.
+        add_test(NAME ${test_name}
+                COMMAND python3 -m lt_test_runner PICO_BOARD ${CMAKE_CURRENT_BINARY_DIR}/${exe_name}
+        )
+        # Correctly define Python module path, so we can call lt_test_runner.
+        get_filename_component(ABSOLUTE_PATH_TO_LIBTROPIC ${PATH_TO_LIBTROPIC} ABSOLUTE)
+        set_tests_properties(${test_name} PROPERTIES
+            ENVIRONMENT "PYTHONPATH=${ABSOLUTE_PATH_TO_LIBTROPIC}/scripts/test_runner"
+        )
 
-#         pico_enable_stdio_usb(${exe_name} 1)
-#         pico_enable_stdio_uart(${exe_name} 0)
-#         pico_add_extra_outputs(${exe_name})
+        pico_enable_stdio_usb(${exe_name} 1)
+        pico_enable_stdio_uart(${exe_name} 0)
+        pico_add_extra_outputs(${exe_name})
 
-#     endforeach()
-# endif()
+    endforeach()
+endif()
 
 
 
